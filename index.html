@@ -1,0 +1,571 @@
+<!--  HEADER  -->
+<!-- Logo acts as a home button — clicking it returns to the About tab (handled in app.js) -->
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="logo" id="logo-btn" role="button" tabindex="0" aria-label="Go to About Obesity">
+      <span class="logo-icon">O</span>
+      <div>
+        <span class="logo-text">Obesity<strong> Hub</strong></span>
+        <div class="logo-sub">Simple information about obesity, treatment, and prevalence</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!--  TAB NAVIGATION  -->
+<!-- Each button has a data-tab attribute that app.js uses to show/hide the right panel -->
+<nav class="tab-nav">
+  <div class="container">
+    <button class="tab-btn active" data-tab="about">About Obesity</button>
+    <button class="tab-btn" data-tab="map">Prevalence Map</button>
+    <button class="tab-btn" data-tab="treatments">Treatments</button>
+    <button class="tab-btn" data-tab="qualifier">Qualifier Tool</button>
+    <button class="tab-btn" data-tab="sources">Sources</button>
+  </div>
+</nav>
+
+<!-- Map tooltip — positioned with JS on hover, hidden by default -->
+<div id="tooltip" class="map-tooltip hidden" aria-hidden="true"></div>
+
+<main>
+
+  <!-- ===== ABOUT TAB ===== -->
+  <section class="tab-panel active" id="panel-about">
+    <div class="container">
+
+      <div class="page-header">
+        <div class="eyebrow">Foundations</div>
+        <h2>Understanding obesity</h2>
+        <p class="lead">
+          Obesity is a chronic disease shaped by biology, daily life, stress, environment, and access
+          to care. It is not just about willpower.
+        </p>
+      </div>
+
+      <!-- Two-column: definition card + BMI table -->
+      <div class="grid-2">
+        <article class="card">
+          <h3 class="card-title">What is obesity?</h3>
+          <p>
+            Obesity is a chronic disease in which excess body fat can affect health and raise the risk
+            of problems involving the heart, metabolism, breathing, joints, and mental health.
+          </p>
+          <p class="card-spacer">
+            BMI is a common screening tool. It is useful, but it should be looked at along with waist
+            size, body composition, other health conditions, and the full clinical picture.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3 class="card-title">BMI classification</h3>
+          <table class="bmi-table">
+            <thead>
+              <tr><th>Category</th><th>BMI (kg/m²)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="dot green"></span> Normal weight</td><td>18.5 - 24.9</td></tr>
+              <tr><td><span class="dot yellow"></span> Overweight</td><td>25.0 - 29.9</td></tr>
+              <tr><td><span class="dot orange"></span> Obesity class I</td><td>30.0 - 34.9</td></tr>
+              <tr><td><span class="dot deep-orange"></span> Obesity class II</td><td>35.0 - 39.9</td></tr>
+              <tr><td><span class="dot red"></span> Obesity class III</td><td>40.0+</td></tr>
+            </tbody>
+          </table>
+        </article>
+      </div>
+
+      <!-- Health impact cards — three columns -->
+      <h3 class="section-title">How obesity affects health</h3>
+      <div class="grid-3">
+        <article class="card feature-card">
+          <div class="health-icon">&#10084;</div>
+          <h4 class="card-h3">Heart and blood vessels</h4>
+          <p>Raises risk of high blood pressure, heart disease, heart failure, and stroke.</p>
+        </article>
+        <article class="card feature-card">
+          <div class="health-icon">&#127822;</div>
+          <h4 class="card-h3">Metabolism</h4>
+          <p>Can contribute to insulin resistance, type 2 diabetes, high cholesterol, and fatty liver disease.</p>
+        </article>
+        <article class="card feature-card">
+          <div class="health-icon">&#129729;</div>
+          <h4 class="card-h3">Breathing</h4>
+          <p>Can make breathing harder and is linked to obstructive sleep apnea.</p>
+        </article>
+        <article class="card feature-card">
+          <div class="health-icon">&#129469;</div>
+          <h4 class="card-h3">Joints and movement</h4>
+          <p>Adds stress to joints and can raise the risk of knee osteoarthritis.</p>
+        </article>
+        <article class="card feature-card">
+          <div class="health-icon">&#129504;</div>
+          <h4 class="card-h3">Mental health</h4>
+          <p>May be linked with depression, anxiety, stigma, social isolation, and lower quality of life.</p>
+        </article>
+        <article class="card feature-card">
+          <div class="health-icon">&#127919;</div>
+          <h4 class="card-h3">Cancer risk</h4>
+          <p>Is linked with a higher risk of several cancers, including colorectal and endometrial cancer.</p>
+        </article>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== MAP TAB ===== -->
+  <!-- Map is lazy-loaded — initMap() only runs the first time this tab is opened -->
+  <section class="tab-panel" id="panel-map">
+    <div class="container">
+
+      <div class="page-header">
+        <div class="eyebrow">Interactive visualization</div>
+        <h2>County and state prevalence map</h2>
+        <p class="lead">
+          Choose a measure, hover over a state for a summary, and click a state to see county-level data.
+          The map uses live data pulled from the CDC PLACES API and the Census ACS API.
+        </p>
+        <p class="lead">
+          Use different measures to explore how obesity overlaps with related health and social factors.
+        </p>
+      </div>
+
+      <!-- Map controls: measure dropdown, view mode label, back button, legend -->
+      <div class="map-controls">
+
+        <!-- Dropdown to switch between health measures — triggers repaintMap() in app.js -->
+        <div class="mini-card measure-picker-card">
+          <span class="mini-label">Measure</span>
+          <div class="select-wrapper">
+            <select id="measure-select" class="measure-select">
+              <option value="OBESITY">Obesity</option>
+              <option value="LPA">Physical inactivity</option>
+              <option value="DIABETES">Diabetes</option>
+              <option value="SLEEP">Short sleep</option>
+              <option value="POVERTY">Poverty</option>
+            </select>
+            <span class="select-chevron">▾</span>
+          </div>
+        </div>
+
+        <!-- Shows "Nationwide" or the clicked state name -->
+        <div class="mini-card">
+          <span class="mini-label">View mode</span>
+          <span class="mini-value" id="view-mode-label">Nationwide</span>
+        </div>
+
+        <!-- Only visible after clicking into a state -->
+        <button id="back-btn" class="btn-secondary" type="button" style="display:none">Back to all states</button>
+        <span id="state-label" class="state-label"></span>
+
+        <!-- Color legend — gradient and labels update when measure changes -->
+        <div class="legend">
+          <span class="legend-text" id="legend-title">Obesity rate</span>
+          <div class="legend-bar" id="legend-bar"></div>
+          <div class="legend-labels">
+            <span id="legend-min">20%</span>
+            <span id="legend-mid">35%</span>
+            <span id="legend-max">50%</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Map container — spinner shows while API data loads, replaced by SVG when ready -->
+      <div id="map-wrap" class="map-wrap">
+        <div id="map-loading" class="map-loading">
+          <div class="spinner"></div>
+          <span>Loading CDC and Census data...</span>
+        </div>
+        <svg id="map-svg" style="display:none; width:100%"></svg>
+        <div id="map-hint" class="map-hint">Hover a state for details and click to zoom into counties.</div>
+      </div>
+
+      <!-- Bar chart — rendered by Chart.js after map data loads, updates with measure -->
+      <div class="card chart-card" id="chart-card" style="display:none">
+        <h3 class="card-title" id="chart-title">Top 15 states</h3>
+        <p class="chart-note" id="chart-note">This chart updates to match the selected measure.</p>
+        <div class="chart-shell"><canvas id="bar-chart"></canvas></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== TREATMENTS TAB ===== -->
+  <!-- Each item is a clickable accordion -->
+  <section class="tab-panel" id="panel-treatments">
+    <div class="container">
+
+      <div class="page-header">
+        <div class="eyebrow">Evidence-based care</div>
+        <h2>Treatment options</h2>
+        <p class="lead">
+          Obesity treatment usually works best as long-term care. Open each option to learn what it
+          involves, who it may help, and what to keep in mind.
+        </p>
+      </div>
+
+      <div class="grid-3">
+
+        <!-- LIFESTYLE MEDICINE -->
+        <article class="tx-card">
+          <div class="tx-header">
+            <div>
+              <div class="tx-title">Lifestyle medicine</div>
+              <div class="tx-sub">First-line care for all patients</div>
+            </div>
+          </div>
+          <p class="tx-intro">Lifestyle treatment is the foundation of obesity care, even when medicines or surgery are also used.</p>
+
+          <div class="tx-items">
+            <div class="tx-item" tabindex="0">
+              <div class="tx-item-head"><span class="tx-item-name">Nutrition and food choices</span><span class="tx-item-chevron">+</span></div>
+              <div class="tx-item-body">
+                <p>No single diet is right for everyone. Eating plans work best when they are affordable, realistic, and sustainable over time.</p>
+                <ul class="tx-detail-list">
+                  <li><strong>Mediterranean diet</strong> — emphasizes vegetables, whole grains, olive oil, legumes, and fish. Strong evidence for heart health and metabolic benefit.</li>
+                  <li><strong>DASH diet</strong> — originally developed to reduce blood pressure. High in fruits, vegetables, and low-fat dairy.</li>
+                  <li><strong>Lower-carbohydrate plans</strong> — can produce faster initial weight loss. May be harder to maintain long-term.</li>
+                  <li><strong>Protein and fiber</strong> — both help with fullness. Prioritizing these at meals can reduce total intake without strict calorie counting.</li>
+                  <li><strong>Practical starting point</strong> — reducing ultra-processed food and sugary drinks often makes a meaningful difference without overhauling everything at once.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="tx-item" tabindex="0">
+              <div class="tx-item-head"><span class="tx-item-name">Physical activity</span><span class="tx-item-chevron">+</span></div>
+              <div class="tx-item-body">
+                <p>Exercise improves metabolic health, mood, and cardiovascular risk even before significant weight loss occurs.</p>
+                <ul class="tx-detail-list">
+                  <li><strong>Aerobic activity</strong> — aim for at least 150 minutes per week of moderate intensity. Brisk walking, cycling, and swimming all count.</li>
+                  <li><strong>Strength training</strong> — at least twice per week helps preserve muscle mass during weight loss and improves insulin sensitivity.</li>
+                  <li><strong>Starting small</strong> — even 20–30 minutes of walking daily can significantly reduce cardiovascular risk.</li>
+                  <li><strong>Daily movement (NEAT)</strong> — standing more, taking stairs, and walking during the day adds up meaningfully.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="tx-item" tabindex="0">
+              <div class="tx-item-head"><span class="tx-item-name">Behavioral support</span><span class="tx-item-chevron">+</span></div>
+              <div class="tx-item-body">
+                <p>Behavior change is one of the strongest predictors of long-term success.</p>
+                <ul class="tx-detail-list">
+                  <li><strong>Self-monitoring</strong> — tracking food, activity, or weight is one of the most effective single habits for weight loss.</li>
+                  <li><strong>Cognitive behavioral therapy (CBT)</strong> — helps identify patterns around emotional eating and builds strategies for lasting change.</li>
+                  <li><strong>Group programs</strong> — social accountability and peer support often make group-based care more effective.</li>
+                  <li><strong>Motivational interviewing</strong> — a patient-centered approach that helps build internal motivation for change.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="tx-item" tabindex="0">
+              <div class="tx-item-head"><span class="tx-item-name">Sleep</span><span class="tx-item-chevron">+</span></div>
+              <div class="tx-item-body">
+                <p>Poor sleep directly disrupts hunger hormones and can make weight loss harder.</p>
+                <ul class="tx-detail-list">
+                  <li><strong>Target 7–9 hours</strong> — sleep deprivation raises ghrelin (hunger hormone) and lowers leptin (fullness hormone), increasing appetite significantly.</li>
+                  <li><strong>Treat sleep apnea</strong> — untreated obstructive sleep apnea interferes with weight loss and raises cardiovascular risk.</li>
+                  <li><strong>Consistent schedule</strong> — going to bed and waking at the same time daily helps regulate metabolic hormones.</li>
+                  <li><strong>Sleep environment</strong> — a cool, dark, quiet room helps. Avoiding screens before bed reduces blue light interference with melatonin.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="tx-item" tabindex="0">
+              <div class="tx-item-head"><span class="tx-item-name">Stress management</span><span class="tx-item-chevron">+</span></div>
+              <div class="tx-item-body">
+                <p>Chronic stress promotes abdominal fat storage and drives emotional eating.</p>
+                <ul class="tx-detail-list">
+                  <li><strong>Stress and cortisol</strong> — prolonged stress keeps cortisol elevated, which increases appetite and promotes fat storage around the abdomen.</li>
+                  <li><strong>Mindfulness-based stress reduction (MBSR)</strong> — structured program with evidence for reducing emotional eating.</li>
+                  <li><strong>Relaxation practices</strong> — yoga, slow breathing, and progressive muscle relaxation all lower cortisol.</li>
+                  <li><strong>Mental health treatment</strong> — depression and anxiety are common in people with obesity. Treating them directly tends to improve weight outcomes.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="tx-indication green">Recommended as part of care for all patients</div>
+        </article>
+
+        <!-- ANTI-OBESITY MEDICATIONS -->
+        <article class="tx-card">
+          <div class="tx-header">
+            <div>
+              <div class="tx-title">Anti-obesity medications</div>
+              <div class="tx-sub">BMI 30+, or 27+ with a weight-related condition</div>
+            </div>
+          </div>
+          <p class="tx-intro">Medicines can reduce hunger, improve fullness, and support meaningful weight loss when used alongside lifestyle changes.</p>
+
+          <div class="tx-items">
+            <div class="tx-item" tabindex="0">
+              <div class="tx-item-head"><span class="tx-item-name">Semaglutide (Wegovy / Ozempic)</span><span class="tx-item-chevron">+</span></div>
+              <div class="tx-item-body">
+                <p>A GLP-1 receptor agonist that mimics a gut hormone to signal fullness, slow digestion, and reduce appetite.</p>
+                <ul class="tx-detail-list">
+                  <li><strong>How it works</strong> — activates GLP-1 receptors in the brain and gut, reducing appetite and slowing gastric emptying.</li>
+                  <li><strong>Weight loss</strong> — clinical trials show an average of around 15% total body weight loss.</li>
+                  <li><strong>Dosing</strong> — weekly injection, starting low and increasing over several months to reduce side effects.</li>
+                  <li><strong>Common side effects</strong> — nausea, vomiting, and constipation, especially during dose increases. Usually improves over time.</li>
+                  <li><strong>Note</strong> — Wegovy is FDA-approved for obesity; Ozempic is approved for type 2 diabetes but shares the same medicine.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="tx-item" tabindex="0">
+              <div class="tx-item-head"><span class="tx-item-name">Tirzepatide (Zepbound / Mounjaro)</span><span class="tx-item-chevron">+</span></div>
+              <div class="tx-item-body">
+                <p>A dual incretin medicine that activates both GLP-1 and GIP receptors. Currently shows the strongest weight-loss results of any approved medication.</p>
+                <ul class="tx-detail-list">
+                  <li><strong>How it works</strong> — activates two hormone receptors at once, amplifying effects on appetite, insulin, and fat metabolism.</li>
+                  <li><strong>Weight loss</strong> — clinical trials show an average of around 21% total body weight loss — the highest of any approved medication so far.</li>
+                  <li><strong>Dosing</strong> — weekly injection, titrated from 2.5 mg up to 15 mg over several months.</li>
+                  <li><strong>Side effects</strong> — similar GI profile to semaglutide. Nausea is most common at dose increases.</li>
+                  <li><strong>Note</strong> — Zepbound is FDA-approved for obesity; Mounjaro is approved for type 2 diabetes.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="tx-item" tabindex="0">
+              <div class="tx-item-head"><span class="tx-item-name">Liraglutide (Saxenda)</span><span class="tx-item-chevron">+</span></div>
+              <div class="tx-item-body">
+                <p>An older GLP-1 receptor agonist that requires daily rather than weekly injections.</p>
+                <ul class="tx-detail-list">
+                  <li><strong>How it works</strong> — same GLP-1 mechanism as semaglutide, but shorter-acting, requiring daily dosing.</li>
+                  <li><strong>Weight loss</strong> — typically around 5–8% total body weight loss in clinical studies.</li>
+                  <li><strong>Dosing</strong> — daily subcutaneous injection, titrated over five weeks from 0.6 mg to 3.0 mg.</li>
+                  <li><strong>When it may be preferred</strong> — if weekly injections are not tolerated or when familiarity with this class is a factor.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="tx-item" tabindex="0">
+              <div class="tx-item-head"><span class="tx-item-name">Naltrexone / bupropion (Contrave)</span><span class="tx-item-chevron">+</span></div>
+              <div class="tx-item-body">
+                <p>An oral combination pill that acts on the brain's reward and hunger pathways. No injections required and often lower cost than injectables.</p>
+                <ul class="tx-detail-list">
+                  <li><strong>How it works</strong> — bupropion activates brain circuits that reduce appetite; naltrexone blocks the reward response that reinforces eating.</li>
+                  <li><strong>Weight loss</strong> — typically around 4–5% total body weight loss.</li>
+                  <li><strong>Dosing</strong> — oral tablet, twice daily, titrated over four weeks.</li>
+                  <li><strong>Important cautions</strong> — not for use in people with seizure disorders, uncontrolled high blood pressure, or current opioid use.</li>
+                  <li><strong>Advantage</strong> — oral pill, no injection required, often more affordable than injectable options.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="tx-indication blue">May help some patients — eligibility depends on BMI and health history</div>
+        </article>
+
+        <!-- BARIATRIC SURGERY -->
+        <article class="tx-card">
+          <div class="tx-header">
+            <div>
+              <div class="tx-title">Bariatric surgery</div>
+              <div class="tx-sub">For severe obesity and selected patients</div>
+            </div>
+          </div>
+          <p class="tx-intro">Surgery can be the most effective long-term treatment for severe obesity, often improving or resolving related conditions like diabetes and sleep apnea.</p>
+
+          <div class="tx-items">
+            <div class="tx-item" tabindex="0">
+              <div class="tx-item-head"><span class="tx-item-name">Sleeve gastrectomy</span><span class="tx-item-chevron">+</span></div>
+              <div class="tx-item-body">
+                <p>The most commonly performed bariatric procedure. About 75–80% of the stomach is removed, leaving a smaller sleeve-shaped stomach.</p>
+                <ul class="tx-detail-list">
+                  <li><strong>How it works</strong> — smaller stomach capacity limits food intake; also reduces ghrelin, the hormone that signals hunger.</li>
+                  <li><strong>Weight loss</strong> — typically 25–30% of total body weight.</li>
+                  <li><strong>Pros</strong> — no intestinal rerouting; technically simpler than bypass; lower long-term complication rate.</li>
+                  <li><strong>Cons</strong> — permanent and irreversible; may worsen acid reflux in some patients.</li>
+                  <li><strong>Recovery</strong> — usually 1–2 days in hospital; most people return to desk work within 2–3 weeks.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="tx-item" tabindex="0">
+              <div class="tx-item-head"><span class="tx-item-name">Roux-en-Y gastric bypass</span><span class="tx-item-chevron">+</span></div>
+              <div class="tx-item-body">
+                <p>A small stomach pouch is created and connected directly to the small intestine, bypassing most of the stomach and the upper portion of the intestine.</p>
+                <ul class="tx-detail-list">
+                  <li><strong>How it works</strong> — combines restriction with significant metabolic and hormonal changes, including a large surge in GLP-1 after meals.</li>
+                  <li><strong>Weight loss</strong> — typically 30–35% of total body weight — the highest of standard procedures.</li>
+                  <li><strong>Best for</strong> — patients with type 2 diabetes (60–80% remission rate), severe acid reflux, or those needing maximum metabolic effect.</li>
+                  <li><strong>Cons</strong> — more complex surgery; higher risk of dumping syndrome; lifelong vitamin and mineral supplements required.</li>
+                  <li><strong>Recovery</strong> — usually 2–3 days in hospital; return to desk work in 3–4 weeks.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="tx-item" tabindex="0">
+              <div class="tx-item-head"><span class="tx-item-name">Adjustable gastric band</span><span class="tx-item-chevron">+</span></div>
+              <div class="tx-item-body">
+                <p>A silicone band placed around the upper stomach that can be tightened or loosened over time via a port under the skin.</p>
+                <ul class="tx-detail-list">
+                  <li><strong>How it works</strong> — purely restrictive; no hormonal component. The band reduces the opening to the lower stomach.</li>
+                  <li><strong>Weight loss</strong> — typically 15–20% of total body weight — the lowest of any bariatric option.</li>
+                  <li><strong>Pros</strong> — fully reversible and adjustable; lowest surgical risk; usually outpatient or one overnight stay.</li>
+                  <li><strong>Cons</strong> — highest long-term complication rate including band slippage and erosion. Use has declined significantly over the past decade.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="tx-item" tabindex="0">
+              <div class="tx-item-head"><span class="tx-item-name">What to expect before and after</span><span class="tx-item-chevron">+</span></div>
+              <div class="tx-item-body">
+                <p>Bariatric surgery requires preparation and long-term follow-up. It is a tool, not a standalone solution.</p>
+                <ul class="tx-detail-list">
+                  <li><strong>Pre-surgery evaluation</strong> — typically includes medical, psychological, and nutritional assessment. Some insurers require a supervised diet program first.</li>
+                  <li><strong>Nutrition after surgery</strong> — vitamin and mineral supplements (B12, iron, calcium, vitamin D) are required long-term, especially after bypass.</li>
+                  <li><strong>Lifestyle still matters</strong> — surgery works best when combined with lasting changes in diet, activity, and follow-up care.</li>
+                  <li><strong>Benefits beyond weight</strong> — many patients see remission of type 2 diabetes, improvement in blood pressure, sleep apnea, and joint pain.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="tx-indication orange">Most effective for severe obesity — requires full evaluation before referral</div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!--  QUALIFIER TAB  -->
+  <!-- Interactive checklist — results update -->
+  <section class="tab-panel" id="panel-qualifier">
+    <div class="container">
+
+      <div class="page-header">
+        <div class="eyebrow">Decision support</div>
+        <h2>Treatment qualifier tool</h2>
+        <p class="lead">This educational tool helps organize common treatment eligibility rules. It is not a diagnosis and does not replace medical judgment.</p>
+      </div>
+
+      <!-- Two-column layout: checklist on left, live results panel on right -->
+      <div class="qualifier-layout">
+        <div class="qualifier-left">
+
+          <!-- Step 1: BMI selection -->
+          <div class="q-card">
+            <div class="q-title"><span class="q-num">1</span> Select patient BMI</div>
+            <div class="bmi-options">
+              <label class="bmi-opt"><input type="radio" name="bmi" value="0" /> BMI below 25</label>
+              <label class="bmi-opt"><input type="radio" name="bmi" value="25" /> BMI 25.0–26.9</label>
+              <label class="bmi-opt"><input type="radio" name="bmi" value="27" /> BMI 27.0–29.9</label>
+              <label class="bmi-opt"><input type="radio" name="bmi" value="30" /> BMI 30.0–34.9</label>
+              <label class="bmi-opt"><input type="radio" name="bmi" value="35" /> BMI 35.0–39.9</label>
+              <label class="bmi-opt"><input type="radio" name="bmi" value="40" /> BMI 40.0 or above</label>
+            </div>
+          </div>
+
+          <!-- Step 2: Comorbidities — count affects medication and surgery eligibility -->
+          <div class="q-card">
+            <div class="q-title"><span class="q-num">2</span> Check obesity-related comorbidities</div>
+            <div class="check-grid">
+              <label class="check-opt"><input type="checkbox" class="comorbid" /> Type 2 diabetes</label>
+              <label class="check-opt"><input type="checkbox" class="comorbid" /> Hypertension</label>
+              <label class="check-opt"><input type="checkbox" class="comorbid" /> Dyslipidemia</label>
+              <label class="check-opt"><input type="checkbox" class="comorbid" /> Sleep apnea</label>
+              <label class="check-opt"><input type="checkbox" class="comorbid" /> Cardiovascular disease</label>
+              <label class="check-opt"><input type="checkbox" class="comorbid" /> Fatty liver disease</label>
+              <label class="check-opt"><input type="checkbox" class="comorbid" /> Osteoarthritis</label>
+              <label class="check-opt"><input type="checkbox" class="comorbid" /> GERD</label>
+            </div>
+          </div>
+
+          <!-- Step 3: Contraindications — block or flag certain treatments -->
+          <div class="q-card">
+            <div class="q-title"><span class="q-num">3</span> Contraindications or caution flags</div>
+            <label class="check-opt contra"><input type="checkbox" id="ci-mtc" /> Personal or family history of medullary thyroid carcinoma</label>
+            <label class="check-opt contra"><input type="checkbox" id="ci-men2" /> MEN2 syndrome</label>
+            <label class="check-opt contra"><input type="checkbox" id="ci-panc" /> Current or past pancreatitis</label>
+            <label class="check-opt contra"><input type="checkbox" id="ci-preg" /> Pregnancy or pregnancy planning</label>
+            <label class="check-opt contra"><input type="checkbox" id="ci-psych" /> Uncontrolled psychiatric condition</label>
+          </div>
+
+          <!-- Step 4: Clinical history — required before surgery referral -->
+          <div class="q-card">
+            <div class="q-title"><span class="q-num">4</span> Clinical history</div>
+            <label class="check-opt hist"><input type="checkbox" id="h-life" /> Tried structured lifestyle treatment for at least 6 months</label>
+            <label class="check-opt hist"><input type="checkbox" id="h-med" /> Previously tried anti-obesity medication</label>
+            <label class="check-opt hist"><input type="checkbox" id="h-surg" /> Cleared for surgery evaluation</label>
+          </div>
+
+        </div>
+
+        <!-- Results panel — content is updated by setResult() in app.js -->
+        <aside class="results-panel">
+          <div class="results-title">Live results</div>
+          <div class="result-item" id="r-lifestyle">
+            <div class="ri-head"><span class="ri-dot gray"></span><span class="ri-name">Lifestyle medicine</span></div>
+            <p class="ri-note">Choose a BMI category to begin.</p>
+          </div>
+          <div class="result-item" id="r-meds">
+            <div class="ri-head"><span class="ri-dot gray"></span><span class="ri-name">Anti-obesity medication</span></div>
+            <p class="ri-note">Medication guidance updates once BMI and comorbidities are selected.</p>
+          </div>
+          <div class="result-item" id="r-surgery">
+            <div class="ri-head"><span class="ri-dot gray"></span><span class="ri-name">Bariatric surgery</span></div>
+            <p class="ri-note">Surgical guidance updates once BMI and history are selected.</p>
+          </div>
+          <button class="btn-reset" id="reset-qualifier" type="button">Reset all fields</button>
+          <div class="disclaimer">
+            Educational only. This tool summarizes simplified treatment thresholds and should not replace
+            full evaluation, medication labeling, or specialist review.
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+  <!--  SOURCES TAB  -->
+  <section class="tab-panel" id="panel-sources">
+    <div class="container">
+
+      <div class="page-header">
+        <div class="eyebrow">References</div>
+        <h2>Sources and links</h2>
+        <p class="lead">This page shows where the map data and health information in this site come from.</p>
+      </div>
+
+      <div class="grid-2">
+        <article class="card">
+          <h3 class="card-title">Map data sources</h3>
+          <ul class="source-list">
+            <li><a href="https://www.cdc.gov/places/index.html" target="_blank" rel="noreferrer">CDC PLACES — Local Data for Better Health</a></li>
+            <li><a href="https://www.cdc.gov/places/measure-definitions/index.html" target="_blank" rel="noreferrer">CDC PLACES measure definitions</a></li>
+            <li><a href="https://www.census.gov/data/developers/data-sets/acs-5year.html" target="_blank" rel="noreferrer">Census ACS 5-year estimates</a></li>
+            <li><a href="https://www.census.gov/topics/income-poverty/poverty.html" target="_blank" rel="noreferrer">Census poverty data overview</a></li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h3 class="card-title">Health information</h3>
+          <ul class="source-list">
+            <li><a href="https://www.cdc.gov/obesity/" target="_blank" rel="noreferrer">CDC obesity overview</a></li>
+            <li><a href="https://www.niddk.nih.gov/health-information/weight-management/adult-overweight-obesity" target="_blank" rel="noreferrer">NIDDK adult overweight and obesity</a></li>
+            <li><a href="https://asmbs.org/patients" target="_blank" rel="noreferrer">ASMBS patient learning resources</a></li>
+            <li><a href="https://www.nhlbi.nih.gov/health/educational/lose_wt/" target="_blank" rel="noreferrer">NHLBI weight management resources</a></li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">Measures used in the map</h3>
+        <p>Obesity, physical inactivity, diabetes, and short sleep come from CDC PLACES. Poverty comes from the US Census Bureau's American Community Survey (ACS) 5-year estimates.</p>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<!--  FOOTER  -->
+<footer class="site-footer">
+  <div class="container">
+    <strong>Obesity Hub</strong> | Built as a public health education and infographic project using live CDC and Census API data. 
+  </div>
+<div class="container" style="margin-top: 0.4rem; font-size: 0.75rem; opacity: 0.75;">
+    This site is for general education only. Content does not constitute medical advice and should not be used as a substitute for professional clinical care.
+  </div>
+</footer>
