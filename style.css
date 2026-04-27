@@ -1,0 +1,726 @@
+/* Google Fonts import */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+/*  RESET  */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/*  CSS VARIABLES  */
+/* Defining colors, shadows, and font here makes it easy to stay consistent */
+:root {
+  --bg: #f4efe6;
+  --surface: rgba(255, 252, 248, 0.94);
+  --line: #dfd2c0;
+  --ink: #2d241c;
+  --muted: #736355;
+  --soft: #9b8c7f;
+  --navy: #12344d;
+  --navy-2: #1f5972;
+  --teal: #1a8c7d;
+  --gold-soft: #fff4dd;
+  --green: #1f8b4c;
+  --green-soft: #e7f7eb;
+  --red: #c0392b;
+  --red-soft: #fff0ee;
+  --shadow: 0 18px 40px rgba(37, 26, 17, 0.09);
+  --radius: 20px;
+  --font: "Outfit", sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+/*  BODY / PAGE BACKGROUND  */
+body {
+  min-height: 100vh;
+  /* Layered radial gradients give the background a subtle warm glow */
+  background:
+    radial-gradient(circle at top left, rgba(224, 165, 58, 0.18), transparent 24%),
+    radial-gradient(circle at top right, rgba(26, 140, 125, 0.12), transparent 26%),
+    linear-gradient(180deg, #fbf7f0 0%, #f4efe6 100%);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* Centers content and caps the max width */
+.container {
+  width: min(1120px, calc(100% - 2rem));
+  margin: 0 auto;
+}
+
+/*  HEADER  */
+/* Sticky so it stays visible while scrolling; blurred background for depth */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  backdrop-filter: blur(12px);
+  background: rgba(255, 248, 239, 0.8);
+  border-bottom: 1px solid rgba(118, 99, 85, 0.14);
+}
+
+.header-inner {
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Logo — styled as plain text, no button appearance */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.logo-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--navy), var(--teal));
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  box-shadow: var(--shadow);
+  flex-shrink: 0;
+}
+
+.logo-text {
+  display: block;
+  font-size: 1.35rem;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+
+.logo-sub {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--soft);
+  margin-top: 0.25rem;
+}
+
+/* tab stuff */
+/* Extra top padding creates space between the header and the nav buttons */
+.tab-nav {
+  margin-bottom: 1rem;
+  padding-top: 1rem;
+}
+
+.tab-nav .container {
+  display: flex;
+  gap: 0.35rem;
+  overflow-x: auto; 
+  /* allows horizontal scroll on small screens */
+  
+  scrollbar-width: none;
+}
+
+.tab-nav .container::-webkit-scrollbar { display: none; }
+
+.tab-btn {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--font);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.95rem 1rem;
+  border-radius: 16px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: 180ms ease;
+}
+
+.tab-btn:hover,
+.tab-btn:focus-visible {
+  background: rgba(18, 52, 77, 0.08);
+  color: var(--navy);
+  outline: none;
+}
+
+/* Active tab gets a filled dark pill style */
+.tab-btn.active {
+  background: linear-gradient(135deg, var(--navy), var(--navy-2));
+  color: #fff;
+  box-shadow: var(--shadow);
+}
+
+/*  TAB PANELS  */
+/* Panels are hidden by default; the active one gets a fade-in animation */
+.tab-panel { display: none; padding: 0.5rem 0 3rem; }
+
+.tab-panel.active {
+  display: block;
+  animation: rise 320ms ease;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/*  PAGE HEADER  */
+.page-header { margin-bottom: 1.6rem; }
+
+.eyebrow {
+  color: var(--teal);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.74rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.page-header h2 {
+  font-size: clamp(1.8rem, 3vw, 2.4rem); /* scales with viewport width */
+  letter-spacing: -0.04em;
+  margin-bottom: 0.6rem;
+}
+
+.lead { max-width: 64ch; color: var(--muted); }
+
+/*  LAYOUT GRIDS    */
+.grid-2, .grid-3 { display: grid; gap: 1rem; }
+
+.grid-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 1.4rem;
+}
+
+.grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 1.4rem;
+}
+
+/*  CARDS*/
+/* Shared base style  */
+.card, .tx-card, .q-card, .results-panel, .mini-card {
+  border-radius: var(--radius);
+  border: 1px solid rgba(118, 99, 85, 0.14);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.card, .tx-card, .q-card, .results-panel { padding: 1.25rem; }
+
+.card-title { font-size: 1rem; margin-bottom: 0.5rem; }
+.card-h3    { font-size: 0.96rem; margin-bottom: 0.35rem; }
+
+/* Muted color for body text inside cards */
+.card p, .tx-intro, .tx-item-body p, .ri-note, .chart-note, .mini-label, .disclaimer {
+  color: var(--muted);
+}
+
+.card-spacer { margin-top: 0.8rem; }
+
+/* Feature cards have a decorative background circle in the bottom-right corner */
+.feature-card { position: relative; overflow: hidden; }
+
+.feature-card::after {
+  content: "";
+  position: absolute;
+  inset: auto -20px -25px auto;
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(26, 140, 125, 0.12), transparent 70%);
+}
+
+.health-icon {
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  margin-bottom: 0.9rem;
+  font-size: 1.3rem;
+  background: linear-gradient(135deg, rgba(18, 52, 77, 0.12), rgba(26, 140, 125, 0.18));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.section-title {
+  font-size: 1.25rem;
+  margin: 1.2rem 0 0.7rem;
+  letter-spacing: -0.03em;
+}
+
+/*  BMI TABLE  */
+.bmi-table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
+
+.bmi-table th, .bmi-table td {
+  padding: 0.65rem 0.55rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(118, 99, 85, 0.12);
+}
+
+.bmi-table th {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--soft);
+}
+
+.bmi-table td { color: var(--muted); font-size: 0.88rem; }
+
+/*  circles next to bmi table stuff */
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 0.45rem;
+}
+
+.dot.green       { background: #46b86c; }
+.dot.yellow      { background: #d9b13d; }
+.dot.orange      { background: #dd8440; }
+.dot.deep-orange { background: #cb6542; }
+.dot.red         { background: #c44235; }
+
+/* TAGS  */
+/* Used for access barriers and other keyword lists */
+.tx-tags { display: flex; flex-wrap: wrap; gap: 0.55rem; margin-top: 0.8rem; }
+
+.tag {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+  font-size: 0.79rem;
+  color: var(--muted);
+}
+
+/*  MAP CONTROLS  */
+.map-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.9rem;
+}
+
+.mini-card { padding: 0.95rem 1rem; }
+
+.mini-label {
+  display: block;
+  font-size: 0.73rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--muted);
+}
+
+.mini-value {
+  display: block;
+  margin-top: 0.2rem;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+/* Measure dropdown — same card size/shape as the view mode card */
+.measure-picker-card { min-width: 160px; }
+
+/* Wrapper holds the <select> and the custom dropdown arrow together */
+.select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-top: 0.2rem;
+}
+
+.measure-select {
+  appearance: none;          
+  /* removes browser default styling */
+  -webkit-appearance: none;
+  border: 0;
+  background: transparent;
+  font-family: var(--font);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink);
+  outline: none;
+  cursor: pointer;
+  width: 100%;
+  padding: 0;
+  padding-right: 1.4rem;
+}
+
+/* Custom dropdown arrow overlaid on the right side of the select */
+.select-chevron {
+  position: absolute;
+  right: 0;
+  pointer-events: none; /* so clicks pass through to the select */
+  color: var(--soft);
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.measure-select option {
+  border-radius: 12px;
+  font-family: var(--font);
+  font-size: 0.9rem;
+  padding: 0.5rem 0.75rem;
+  background: #fffdf8;
+  color: var(--ink);
+}
+
+.state-label { font-weight: 700; color: var(--ink); }
+
+/* map legend */
+.legend {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.legend-text { font-size: 0.75rem; color: var(--muted); }
+
+/* Gradient bar — background is set dynamically in app.js when measure changes */
+.legend-bar {
+  width: 160px;
+  height: 12px;
+  border-radius: 999px;
+  margin: 0.3rem 0 0.2rem;
+}
+
+.legend-labels {
+  width: 160px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: var(--soft);
+}
+
+/* map container */
+.map-wrap {
+  overflow: hidden;
+  border-radius: 26px;
+  background: linear-gradient(180deg, #fffdf8, #fff8ed);
+  border: 1px solid rgba(118, 99, 85, 0.14);
+  box-shadow: var(--shadow);
+}
+
+/* Loading state shown while API calls are in progress */
+.map-loading {
+  min-height: 460px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  color: var(--muted);
+}
+
+.spinner {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #dccbb8;
+  border-top-color: var(--navy);
+  animation: spin 0.75s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.map-hint {
+  text-align: center;
+  padding: 0.7rem;
+  font-size: 0.82rem;
+  background: rgba(18, 52, 77, 0.04);
+  color: var(--muted);
+  border-top: 1px solid rgba(118, 99, 85, 0.12);
+}
+
+/* map stuff */
+/* Fixed position so it follows the cursor; hidden by default */
+.map-tooltip {
+  position: fixed;
+  z-index: 9999;
+  min-width: 230px;
+  max-width: 290px;
+  padding: 0.85rem 0.95rem;
+  background: rgba(255, 252, 248, 0.98);
+  border: 1px solid rgba(118, 99, 85, 0.18);
+  border-radius: 14px;
+  pointer-events: none;
+  box-shadow: var(--shadow);
+}
+
+.map-tooltip.hidden { display: none; }
+
+.tt-name { font-weight: 700; color: var(--ink); margin-bottom: 0.5rem; }
+
+.tt-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+  margin-top: 0.22rem;
+}
+
+/* The active row (matching the currently selected measure) is highlighted */
+.tt-row.active { color: var(--ink); font-weight: 700; }
+.tt-val { color: var(--ink); font-weight: 600; }
+
+/* ===== CHART ===== */
+.chart-card { margin-top: 1.2rem; }
+.chart-shell { position: relative; height: 330px; margin-top: 1rem; }
+
+/* buttons */
+.btn-secondary, .btn-reset {
+  border: 1px solid rgba(118, 99, 85, 0.18);
+  border-radius: 14px;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: 180ms ease;
+}
+
+.btn-secondary {
+  background: #fff;
+  color: var(--ink);
+  padding: 0.7rem 1rem;
+  font-weight: 600;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus-visible,
+.btn-reset:hover,
+.btn-reset:focus-visible {
+  transform: translateY(-1px);
+  outline: none;
+  box-shadow: var(--shadow);
+}
+
+/* treatment */
+.tx-card { display: flex; flex-direction: column; gap: 0.9rem; }
+.tx-header { display: flex; align-items: center; gap: 0.85rem; }
+.tx-title  { font-size: 1rem; font-weight: 700; }
+.tx-sub    { font-size: 0.8rem; color: var(--soft); }
+
+.tx-items { display: flex; flex-direction: column; gap: 0.55rem; }
+
+/* Each expandable item is a rounded box */
+.tx-item {
+  border: 1px solid rgba(118, 99, 85, 0.14);
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.tx-item-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+}
+
+.tx-item:hover .tx-item-head,
+.tx-item:focus-within .tx-item-head {
+  background: rgba(18, 52, 77, 0.04);
+}
+
+.tx-item-name { font-size: 0.9rem; font-weight: 600; }
+
+/* Chevron rotates 45deg when the item is open */
+.tx-item-chevron {
+  color: var(--soft);
+  font-size: 1.1rem;
+  transition: transform 180ms ease;
+  flex-shrink: 0;
+}
+
+.tx-item.open .tx-item-chevron {
+  transform: rotate(45deg);
+  color: var(--navy);
+}
+
+/* Body is hidden by default, shown when the parent has .open class */
+.tx-item-body { display: none; padding: 0 1rem 1rem; }
+.tx-item.open .tx-item-body { display: block; }
+
+.tx-detail-list { padding-left: 1rem; margin-top: 0.5rem; }
+
+.tx-detail-list li {
+  color: var(--muted);
+  margin-top: 0.45rem;
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.tx-detail-list li strong { color: var(--ink); }
+
+/* Colored eligibility banner at the bottom of each treatment card */
+.tx-indication {
+  padding: 0.7rem 0.8rem;
+  border-radius: 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.tx-indication.green  { background: var(--green-soft); color: #1b6a39; }
+.tx-indication.blue   { background: #e6f2f8; color: var(--navy); }
+.tx-indication.orange { background: var(--gold-soft); color: #9b6610; }
+
+/* qualifier */
+/* Two-column layout: checklist left, results panel right */
+.qualifier-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 1rem;
+  align-items: start;
+}
+
+.q-title {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-weight: 700;
+  margin-bottom: 0.9rem;
+}
+
+/* Numbered step badge */
+.q-num {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--navy), var(--teal));
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.bmi-options { display: grid; gap: 0.55rem; }
+
+/* Shared styles for all clickable option rows (BMI, comorbidities, etc.) */
+.bmi-opt, .check-opt {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  padding: 0.85rem 0.9rem;
+  border: 1px solid rgba(118, 99, 85, 0.14);
+  border-radius: 16px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.7);
+  transition: 180ms ease;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.bmi-opt input, .check-opt input {
+  margin-top: 0.15rem;
+  accent-color: var(--navy);
+  flex-shrink: 0;
+}
+
+/* Highlight on hover or when selected */
+.bmi-opt:hover,
+.check-opt:hover,
+.bmi-opt.selected,
+.check-opt.comorbid-checked {
+  border-color: rgba(18, 52, 77, 0.26);
+  background: rgba(18, 52, 77, 0.06);
+  color: var(--ink);
+}
+
+/* Contraindications turn red when checked */
+.check-opt.contra-checked {
+  border-color: rgba(192, 57, 43, 0.25);
+  background: var(--red-soft);
+}
+
+/* History items turn green when checked */
+.check-opt.hist-checked {
+  border-color: rgba(31, 139, 76, 0.25);
+  background: var(--green-soft);
+}
+
+.check-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+/* Sticky so the results stay in view while the user scrolls through the checklist */
+.results-panel { position: sticky; top: 92px; }
+.results-title { font-weight: 800; margin-bottom: 0.85rem; }
+
+.result-item {
+  border: 1px solid rgba(118, 99, 85, 0.14);
+  border-radius: 16px;
+  padding: 0.95rem;
+  margin-bottom: 0.75rem;
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.ri-head { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.3rem; }
+
+/* Status dot */
+.ri-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.ri-dot.gray  { background: #b9aea1; }
+.ri-dot.green { background: var(--green); }
+.ri-dot.red   { background: var(--red); }
+
+.ri-name { font-weight: 700; }
+
+.result-eligible { background: var(--green-soft); border-color: rgba(31, 139, 76, 0.2); }
+.result-contra   { background: var(--red-soft);   border-color: rgba(192, 57, 43, 0.18); }
+
+/* Reset button gets the dark navy style to stand out from the result cards */
+.btn-reset {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background: linear-gradient(135deg, var(--navy), var(--navy-2));
+  color: #fff;
+  font-weight: 700;
+}
+
+.disclaimer { margin-top: 0.8rem; font-size: 0.77rem; }
+
+/* ===== SOURCES PAGE ===== */
+.source-list { padding-left: 1.1rem; }
+.source-list li { margin-top: 0.45rem; color: var(--muted); }
+.source-list a  { color: var(--navy); text-decoration: none; }
+.source-list a:hover { text-decoration: underline; }
+
+/* ===== FOOTER ===== */
+.site-footer {
+  padding: 1.4rem 0 2rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+/*  RESPONSIVE  */
+/* Stack to single column on tablets and smaller */
+@media (max-width: 980px) {
+  .qualifier-layout, .grid-3 { grid-template-columns: 1fr; }
+  .grid-2 { grid-template-columns: 1fr; }
+  .results-panel { position: static; } /* unstick on mobile so it doesn't overlap */
+}
+
+@media (max-width: 720px) {
+  .header-inner {
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0.8rem 0;
+  }
+  .check-grid { grid-template-columns: 1fr; }
+  .legend { margin-left: 0; align-items: flex-start; }
+  .map-controls { align-items: stretch; }
+  .measure-picker-card { width: 100%; }
+}
